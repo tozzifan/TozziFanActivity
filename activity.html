@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Dowload data and analyze the data frame</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<p>title: &ldquo;Analyzing  personal movement&rdquo;</p>
+
+<ul>
+<li>author: &ldquo;Tozzi Fan&rdquo;</li>
+<li>date: &ldquo;13 May 2016&rdquo;</li>
+</ul>
+
+<h2>Dowload data and analyze the data frame</h2>
+
+<p>The data is a comma delimited file, it includes 17,568 observations of 3 variables on
+personal movement collected from october 2012 to november 2012. The data has been downloaded by
+the following web page <a href="https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip">https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip</a>.
+The file has been downloaded on the 11 May 2016 at 11:12:28 GMT </p>
+
+<ul>
+<li><p>The variables are</p>
+
+<ul>
+<li>steps: number of steps taken in a 5 min interval</li>
+<li>date: the date when the measurement was taken in YYY-MM-DD format</li>
+<li>interval: Identifier for the 5-min interval in which the measurement was taken</li>
+</ul></li>
+<li><p>The first two step of the current analysis are:</p>
+
+<ul>
+<li>set the working directory, unzip the activity.zip file, read it and change data format from level to factor.</li>
+<li>analyze the data frame and chose the appropriate strategy to take into account of NA values.</li>
+</ul></li>
+</ul>
+
+<pre><code class="r">activity &lt;- read.csv (&quot;activity.csv&quot;, header = T, sep = &quot;,&quot;)
+str(activity)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    17568 obs. of  3 variables:
+##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ date    : Factor w/ 61 levels &quot;2012-10-01&quot;,&quot;2012-10-02&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+</code></pre>
+
+<pre><code class="r">activity$date &lt;- as.Date(activity$date, &quot;%Y-%m-%d&quot;)
+str(activity);dim(activity)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    17568 obs. of  3 variables:
+##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ date    : Date, format: &quot;2012-10-01&quot; &quot;2012-10-01&quot; ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+</code></pre>
+
+<pre><code>## [1] 17568     3
+</code></pre>
+
+<pre><code class="r">apply(is.na(activity),2,sum)
+</code></pre>
+
+<pre><code>##    steps     date interval 
+##     2304        0        0
+</code></pre>
+
+<p>Looking at the result of the function apply it can be noticed that the variable steps are 2304 NAs.However since the function sum (<a href="http://www.r-bloggers.com/perculiar-behaviour-of-the-sum-function/">http://www.r-bloggers.com/perculiar-behaviour-of-the-sum-function/</a> suffers of a problem with the option na.rm=T when all the element of a vector are equal to Na I decide to eliminate all the NAs from the . You can check the existence of the problem in the function sum by running the following </p>
+
+<pre><code class="r">z&lt;-c(NaN, NaN, NaN); sum(z, na.rm=T) 
+</code></pre>
+
+<pre><code>## [1] 0
+</code></pre>
+
+<p>The new data-frame without Nas is called NoNaActivity and it is obtained as follows:</p>
+
+<pre><code class="r">NoNaActivity &lt;- activity[!is.na(activity$steps), ]
+str(NoNaActivity)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    15264 obs. of  3 variables:
+##  $ steps   : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ date    : Date, format: &quot;2012-10-02&quot; &quot;2012-10-02&quot; ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+</code></pre>
+
+<pre><code class="r">dim(NoNaActivity)
+</code></pre>
+
+<pre><code>## [1] 15264     3
+</code></pre>
+
+<pre><code class="r">apply(is.na(NoNaActivity),2,sum)
+</code></pre>
+
+<pre><code>##    steps     date interval 
+##        0        0        0
+</code></pre>
+
+<h3>First project question: What is the mean total number of steps taken per day?</h3>
+
+<p>The following points are further requested by the question:</p>
+
+<ul>
+<li>Calculate the total number of steps taken per day</li>
+<li>Calculate and report the mean and median of the total number of steps taken per day</li>
+<li>Make a histogram of the total number of steps taken each day</li>
+</ul>
+
+<p>Accordingly I </p>
+
+<ul>
+<li>grouped steps by day employing the library plyr </li>
+<li>compute the mean and the median per day </li>
+<li>plot the histogramm (Figure 1) of the total number of steps employing the library ggplot2</li>
+</ul>
+
+<pre><code class="r">library(dplyr)
+</code></pre>
+
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;
+</code></pre>
+
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag
+</code></pre>
+
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union
+</code></pre>
+
+<pre><code class="r">DailySteps &lt;- NoNaActivity %&gt;% group_by(date) %&gt;%
+summarise(TotNumSteps = sum(steps, na.rm = any(!is.na(steps))))
+apply(is.na(DailySteps),2,sum)
+</code></pre>
+
+<pre><code>##        date TotNumSteps 
+##           0           0
+</code></pre>
+
+<pre><code class="r">str(DailySteps)
+</code></pre>
+
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    53 obs. of  2 variables:
+##  $ date       : Date, format: &quot;2012-10-02&quot; &quot;2012-10-03&quot; ...
+##  $ TotNumSteps: int  126 11352 12116 13294 15420 11015 12811 9900 10304 17382 ...
+</code></pre>
+
+<pre><code class="r">summary(DailySteps$TotNumSteps)
+</code></pre>
+
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##      41    8841   10760   10770   13290   21190
+</code></pre>
+
+<pre><code class="r">summary(DailySteps$TotNumSteps)[3]
+</code></pre>
+
+<pre><code>## Median 
+##  10760
+</code></pre>
+
+<pre><code class="r">summary(DailySteps$TotNumSteps)[4]
+</code></pre>
+
+<pre><code>##  Mean 
+## 10770
+</code></pre>
+
+<p>Once the Nas have been eliminated there is a little difference between mean(10770) and median(10760) and cosequently the distribution is centered as can be noticed once the histogram is plotted</p>
+
+<pre><code class="r">library(ggplot2)
+</code></pre>
+
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.2.5
+</code></pre>
+
+<pre><code class="r">Fig1&lt;-ggplot(DailySteps, aes(TotNumSteps)) +
+  geom_histogram(breaks=seq(0, 25000, by = 2500),
+                  col=&quot;black&quot;,
+                  aes(fill=..count..)) +
+                  scale_fill_gradient(&quot;Count&quot;, low = &quot;green&quot;, high = &quot;red&quot;)+
+                  labs(title=&quot;Figure 1. Total Number of Steps per Day&quot;)
+Fig1
+</code></pre>
+
+<p><img src="figure/Figure%201-1.png" alt="plot of chunk Figure 1"/></p>
+
+<p>I decide to employ 5 breakes since they allows to obtain a suitable frequency distribution (quasi-normal) Looking at the Figure 1 it can be noticed that the modal class (red bar) is characterized by the total number of steps between 10000 and 12500</p>
+
+<h3>Second project question: What is the average daily activity pattern?</h3>
+
+<p>The following points are further requested by the project:</p>
+
+<ul>
+<li>ake a time series plot (i.e. type = &ldquo;l&rdquo;) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)</li>
+<li>Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?</li>
+</ul>
+
+<p>Accordingly I </p>
+
+<ul>
+<li>grouped steps by intervals and individuate the interval containing the maximum number of steps </li>
+<li>plot the time series (Figure 2) in which the maximum number of steps is indicated by a vertical axis.</li>
+</ul>
+
+<pre><code class="r">AverageIntervalSteps &lt;- NoNaActivity %&gt;% group_by(interval) %&gt;%
+        summarise(MeanSteps = mean(steps, na.rm = T))
+str(AverageIntervalSteps)
+</code></pre>
+
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    288 obs. of  2 variables:
+##  $ interval : int  0 5 10 15 20 25 30 35 40 45 ...
+##  $ MeanSteps: num  1.717 0.3396 0.1321 0.1509 0.0755 ...
+</code></pre>
+
+<pre><code class="r">max(AverageIntervalSteps$MeanSteps)
+</code></pre>
+
+<pre><code>## [1] 206.1698
+</code></pre>
+
+<pre><code class="r">MaxNumSteps.id &lt;- which(AverageIntervalSteps$MeanSteps == max(AverageIntervalSteps$MeanSteps)) 
+MaxNumStepsInterv &lt;- AverageIntervalSteps[MaxNumSteps.id, 1] 
+str(MaxNumStepsInterv$interval)
+</code></pre>
+
+<pre><code>##  int 835
+</code></pre>
+
+<pre><code class="r">Fig2&lt;-ggplot(AverageIntervalSteps, aes(x = interval, y = MeanSteps)) +
+       geom_line(colour=&quot;blue&quot;) + 
+       geom_vline(xintercept=MaxNumStepsInterv$interval, linetype=&quot;dotted&quot;, colour = &quot;red&quot;) + 
+       geom_text(data=AverageIntervalSteps[MaxNumSteps.id, ], label=&quot;(835, 206.17)&quot;,
+                 colour= &quot;red&quot;,vjust=1)+
+       labs(y = &quot;Mean number of daily steps&quot;) + labs(x = &quot;5 minutes time Interval&quot;)+
+       labs(title=&quot;Figure 2. Average Daily Number of Steps by 5 minutes time interval&quot;)
+Fig2
+</code></pre>
+
+<p><img src="figure/Figure%202-1.png" alt="plot of chunk Figure 2"/></p>
+
+<p>The maximum number of step (206) is achieved around the 14 pm </p>
+
+<h3>Third project question: imputing missing values</h3>
+
+<p>The following points are further requested by the project:</p>
+
+<ul>
+<li>Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)</li>
+<li>Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.</li>
+<li>Create a new dataset that is equal to the original dataset but with the missing data filled in.</li>
+<li>Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?</li>
+</ul>
+
+<p>Accordingly I </p>
+
+<ul>
+<li>calculate and report the total number of missing values (NAs)</li>
+<li>identify a strategy for filling NAs </li>
+<li>plot the new histogram (Figure 4)</li>
+<li>analyze the difference between the two dataframes, that is the data frame without NAs and that one with NAs filled, in terms of mean and median.</li>
+</ul>
+
+<pre><code class="r">apply(is.na(activity),2,sum)
+</code></pre>
+
+<pre><code>##    steps     date interval 
+##     2304        0        0
+</code></pre>
+
+<p>As highlighted before there are 2304 NAs</p>
+
+<pre><code class="r">NoNADailyStepsDate &lt;- NoNaActivity %&gt;% group_by(date) %&gt;%
+        summarise(NoNaMean = mean(steps), NoNaMed = median(steps), NoNaMax=max(steps), NoNaMin=min(steps), n = sum(steps)/mean(steps) )
+NoNADailyStepsDate
+</code></pre>
+
+<pre><code>## Source: local data frame [53 x 6]
+## 
+##          date NoNaMean NoNaMed NoNaMax NoNaMin     n
+##        (date)    (dbl)   (dbl)   (int)   (int) (dbl)
+## 1  2012-10-02  0.43750       0     117       0   288
+## 2  2012-10-03 39.41667       0     613       0   288
+## 3  2012-10-04 42.06944       0     547       0   288
+## 4  2012-10-05 46.15972       0     555       0   288
+## 5  2012-10-06 53.54167       0     526       0   288
+## 6  2012-10-07 38.24653       0     523       0   288
+## 7  2012-10-09 44.48264       0     748       0   288
+## 8  2012-10-10 34.37500       0     413       0   288
+## 9  2012-10-11 35.77778       0     748       0   288
+## 10 2012-10-12 60.35417       0     802       0   288
+## ..        ...      ...     ...     ...     ...   ...
+</code></pre>
+
+<pre><code class="r">NoNaActivityInt &lt;- activity[!is.na(activity$interval), ]
+NoNADailyStepsDateInt &lt;- NoNaActivity %&gt;% group_by(interval) %&gt;%
+        summarise(NoNaMean = mean(steps), NoNaMed = median(steps), NoNaMax=max(steps), NoNaMin=min(steps), n = sum(steps)/mean(steps) )
+NoNADailyStepsDateInt
+</code></pre>
+
+<pre><code>## Source: local data frame [288 x 6]
+## 
+##    interval  NoNaMean NoNaMed NoNaMax NoNaMin     n
+##       (int)     (dbl)   (int)   (int)   (int) (dbl)
+## 1         0 1.7169811       0      47       0    53
+## 2         5 0.3396226       0      18       0    53
+## 3        10 0.1320755       0       7       0    53
+## 4        15 0.1509434       0       8       0    53
+## 5        20 0.0754717       0       4       0    53
+## 6        25 2.0943396       0      52       0    53
+## 7        30 0.5283019       0      28       0    53
+## 8        35 0.8679245       0      46       0    53
+## 9        40 0.0000000       0       0       0   NaN
+## 10       45 1.4716981       0      72       0    53
+## ..      ...       ...     ...     ...     ...   ...
+</code></pre>
+
+<p>Looking at the two groups of data I prefer to work with the interval since mean and median are closer. But, since the mean is less robust of the media I substitute the NA with the respective median. Before fill the NAs with the median I analyze the distribution of the median in the first data frame NoNaActivity (Figure 3)</p>
+
+<pre><code class="r">MedInterval&lt;- NoNaActivity %&gt;% group_by(interval) %&gt;%   
+         summarize(MedianSteps = median(steps, na.rm = T))
+         hist(MedInterval$MedianSteps, main =&quot;Figure 3. Median number of steps distribution&quot;)
+</code></pre>
+
+<p><img src="figure/Figure%203-1.png" alt="plot of chunk Figure 3"/></p>
+
+<pre><code class="r">         table(MedInterval$MedianSteps)
+</code></pre>
+
+<pre><code>## 
+##   0   6   7   8   9  10  12  13  14  15  16  18  19  20  24  25  26  28 
+## 235   1   7   4   1   2   1   3   1   3   2   1   3   1   1   2   3   1 
+##  30  31  32  33  34  37  41  42  43  45  51  60 
+##   2   1   1   4   1   1   1   1   1   1   1   1
+</code></pre>
+
+<p>At this point I run the following for cicle to fill the NAs with the median. The new data frame is called MedActivity</p>
+
+<pre><code class="r">MedActivity&lt;-activity
+for (i in 1:nrow(MedActivity)) {  
+        if (is.na(MedActivity$steps[i])) {  
+         index &lt;- MedActivity$interval[i] 
+         value &lt;- subset(MedInterval, interval==index)
+         MedActivity$steps[i] &lt;- value$MedianSteps        
+     }
+}
+str(MedActivity)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    17568 obs. of  3 variables:
+##  $ steps   : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ date    : Date, format: &quot;2012-10-01&quot; &quot;2012-10-01&quot; ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+</code></pre>
+
+<p>Now the first analysis is repeated. That is the total number of step by day is computed </p>
+
+<pre><code class="r">FillDailySteps &lt;- MedActivity %&gt;% group_by(date) %&gt;%
+        summarise(TotNumSteps = sum(steps))
+</code></pre>
+
+<p>The new histogram (Figure 4)</p>
+
+<pre><code class="r">Fig4&lt;-ggplot(FillDailySteps, aes(TotNumSteps)) +
+        geom_histogram(breaks=seq(0, 25000, by = 2500),
+                       col=&quot;black&quot;,
+                       aes(fill=..count..)) +
+        scale_fill_gradient(&quot;Count&quot;, low = &quot;green&quot;, high = &quot;red&quot;)+
+        labs(title=&quot;Figure 4. Total Number of Steps per Day&quot;)
+Fig4
+</code></pre>
+
+<p><img src="figure/Figure%204-1.png" alt="plot of chunk Figure 4"/></p>
+
+<p>Now I compare the mean and the median of daily total number of steps for the two data frame named NoNaActivity (no NAs values) and MedActivity (NAs equal median of interval) respectively</p>
+
+<pre><code class="r">summary(NoNaActivity$steps)
+</code></pre>
+
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00    0.00    0.00   37.38   12.00  806.00
+</code></pre>
+
+<pre><code class="r">summary(MedActivity$steps)
+</code></pre>
+
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##       0       0       0      33       8     806
+</code></pre>
+
+<p>Since the NAs have been substituted with the median that is, in most of caseses, equal to 0 (see Figure 3). The mean of the daily total number of stepsa in the &ldquo;filled&rdquo;&ldquo; data frame (FillDailySteps) is lower than the corrisponding value achieved by the mean in the data frame without NAs (NoNaActivity) 
+To best appreciate the difference the two histogram are jointly plotted by employing the library gridExtra </p>
+
+<pre><code class="r">library(gridExtra)
+</code></pre>
+
+<pre><code>## Warning: package &#39;gridExtra&#39; was built under R version 3.2.5
+</code></pre>
+
+<pre><code>## 
+## Attaching package: &#39;gridExtra&#39;
+</code></pre>
+
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     combine
+</code></pre>
+
+<pre><code class="r">grid.arrange(Fig1, Fig4, ncol=2, nrow =1)
+</code></pre>
+
+<p><img src="figure/Figure%205-1.png" alt="plot of chunk Figure 5"/>
+By the analysis of the figures clearly appears that the difference in two distribution relies in the daily total number of step equal to o</p>
+
+<h3>Fourth project question: Are there differences in activity patterns between weekdays and weekends?</h3>
+
+<p>The following points are further requested by the project:</p>
+
+<ul>
+<li>Create a new factor variable in the dataset with two levels - &quot;weekday&rdquo; and &ldquo;weekend&rdquo; indicating whether a given date is a weekday or weekend day.</li>
+<li>Make a panel plot containing a time series plot (i.e. type = &ldquo;l&rdquo;) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).</li>
+</ul>
+
+<p>Accordingly I </p>
+
+<ul>
+<li>Create a new factor variable in the dataset with two levels - &ldquo;weekday&rdquo; and &ldquo;weekend&rdquo;</li>
+<li>Split the data frame into two data frames containing respectively &ldquo;weekend&rdquo;&ldquo; and &quot;weekday&rdquo; days </li>
+<li>Compute the mean by interval for each data frames</li>
+<li>Bind the two data frame in order to make a panel plot (weekday vs weekend) using ggplot2 and the function facet.The new plot is named Figure 6</li>
+</ul>
+
+<p>Below I add an indicator variable which trasform date into two modalities: weekend and weekday the two factors</p>
+
+<pre><code class="r">MedActivity$day &lt;- ifelse(weekdays(MedActivity$date) %in% c(&quot;Saturday&quot;, &quot;Sunday&quot;), &quot;weekend&quot;, &quot;weekday&quot;)
+</code></pre>
+
+<p>I split the MedActivity data frame</p>
+
+<pre><code class="r">weekend &lt;- filter(MedActivity, day == &quot;weekend&quot;)
+weekday &lt;- filter(MedActivity, day == &quot;weekday&quot;)
+</code></pre>
+
+<p>Then for each data frame I compute the mean of steps by interval</p>
+
+<pre><code class="r">weekend &lt;- weekend %&gt;%
+        group_by(interval) %&gt;%
+        summarize(MeanSteps = mean(steps)) 
+weekend$day &lt;- &quot;weekend&quot;
+weekday &lt;- weekday %&gt;%
+        group_by(interval) %&gt;%
+        summarize(MeanSteps = mean(steps)) 
+weekday$day &lt;- &quot;weekday&quot;
+newInterval &lt;- rbind(weekend, weekday)
+newInterval$day &lt;- as.factor(newInterval$day)
+newInterval$day &lt;- relevel(newInterval$day, &quot;weekend&quot;)
+</code></pre>
+
+<p>Finally I make the plot </p>
+
+<pre><code class="r">Fig6&lt;-ggplot(newInterval,aes(interval,MeanSteps)) +
+        geom_line(color=&quot;blue&quot;) +
+        facet_grid(.~day) + 
+        labs(x=&quot;Intervals&quot;, y=expression(&quot;Number of Steps&quot;)) + 
+        labs(title=expression(&quot;Figure 6. Number of Steps in weekdays and weekend&quot;))+
+        scale_fill_brewer(palette = &quot;Set1&quot;)
+Fig6
+</code></pre>
+
+<p><img src="figure/Figure%206-1.png" alt="plot of chunk Figure 6"/></p>
+
+<p>It is intersting to observe that the peak is achieved in the same interval, around the 14 am. However during the weekend people appear more relaxed!</p>
+
+</body>
+
+</html>
+

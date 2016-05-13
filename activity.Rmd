@@ -1,0 +1,249 @@
+title: "Analyzing  personal movement"
+  + author: "Tozzi Fan"
+  + date: "13 May 2016"
+  
+## Dowload data and analyze the data frame
+The data is a comma delimited file, it includes 17,568 observations of 3 variables on
+personal movement collected from october 2012 to november 2012. The data has been downloaded by
+the following web page https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip.
+The file has been downloaded on the 11 May 2016 at 11:12:28 GMT 
+
+* The variables are
+ + steps: number of steps taken in a 5 min interval
+ + date: the date when the measurement was taken in YYY-MM-DD format
+ + interval: Identifier for the 5-min interval in which the measurement was taken
+ 
+* The first two step of the current analysis are:
+ + set the working directory, unzip the activity.zip file, read it and change data format from level to factor.
+ + analyze the data frame and chose the appropriate strategy to take into account of NA values.
+
+```{r}
+activity <- read.csv ("activity.csv", header = T, sep = ",")
+str(activity)
+activity$date <- as.Date(activity$date, "%Y-%m-%d")
+str(activity);dim(activity)
+apply(is.na(activity),2,sum)
+```
+
+Looking at the result of the function apply it can be noticed that the variable steps are 2304 NAs.However since the function sum (http://www.r-bloggers.com/perculiar-behaviour-of-the-sum-function/ suffers of a problem with the option na.rm=T when all the element of a vector are equal to Na I decide to eliminate all the NAs from the . You can check the existence of the problem in the function sum by running the following 
+```{r}
+z<-c(NaN, NaN, NaN); sum(z, na.rm=T) 
+```
+
+The new data-frame without Nas is called NoNaActivity and it is obtained as follows:
+```{r}
+NoNaActivity <- activity[!is.na(activity$steps), ]
+str(NoNaActivity)
+dim(NoNaActivity)
+apply(is.na(NoNaActivity),2,sum)
+```
+
+### First project question: What is the mean total number of steps taken per day?
+The following points are further requested by the question:
++ Calculate the total number of steps taken per day
++ Calculate and report the mean and median of the total number of steps taken per day
++ Make a histogram of the total number of steps taken each day
+
+Accordingly I 
++ grouped steps by day employing the library plyr 
++ compute the mean and the median per day 
++ plot the histogramm (Figure 1) of the total number of steps employing the library ggplot2
+```{r}
+library(dplyr)
+DailySteps <- NoNaActivity %>% group_by(date) %>%
+summarise(TotNumSteps = sum(steps, na.rm = any(!is.na(steps))))
+apply(is.na(DailySteps),2,sum)
+str(DailySteps)
+summary(DailySteps$TotNumSteps)
+summary(DailySteps$TotNumSteps)[3]
+summary(DailySteps$TotNumSteps)[4]
+```
+Once the Nas have been eliminated there is a little difference between mean(10770) and median(10760) and cosequently the distribution is centered as can be noticed once the histogram is plotted
+
+```{r Figure 1}
+library(ggplot2)
+Fig1<-ggplot(DailySteps, aes(TotNumSteps)) +
+  geom_histogram(breaks=seq(0, 25000, by = 2500),
+                  col="black",
+                  aes(fill=..count..)) +
+                  scale_fill_gradient("Count", low = "green", high = "red")+
+                  labs(title="Figure 1. Total Number of Steps per Day")
+Fig1
+```
+
+I decide to employ 5 breakes since they allows to obtain a suitable frequency distribution (quasi-normal) Looking at the Figure 1 it can be noticed that the modal class (red bar) is characterized by the total number of steps between 10000 and 12500
+
+### Second project question: What is the average daily activity pattern?
+The following points are further requested by the project:
++ ake a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
++ Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
+Accordingly I 
++ grouped steps by intervals and individuate the interval containing the maximum number of steps 
++ plot the time series (Figure 2) in which the maximum number of steps is indicated by a vertical axis.
+```{r}
+AverageIntervalSteps <- NoNaActivity %>% group_by(interval) %>%
+        summarise(MeanSteps = mean(steps, na.rm = T))
+str(AverageIntervalSteps)
+max(AverageIntervalSteps$MeanSteps)
+MaxNumSteps.id <- which(AverageIntervalSteps$MeanSteps == max(AverageIntervalSteps$MeanSteps)) 
+MaxNumStepsInterv <- AverageIntervalSteps[MaxNumSteps.id, 1] 
+str(MaxNumStepsInterv$interval)
+```
+
+```{r Figure 2}
+Fig2<-ggplot(AverageIntervalSteps, aes(x = interval, y = MeanSteps)) +
+       geom_line(colour="blue") + 
+       geom_vline(xintercept=MaxNumStepsInterv$interval, linetype="dotted", colour = "red") + 
+       geom_text(data=AverageIntervalSteps[MaxNumSteps.id, ], label="(835, 206.17)",
+                 colour= "red",vjust=1)+
+       labs(y = "Mean number of daily steps") + labs(x = "5 minutes time Interval")+
+       labs(title="Figure 2. Average Daily Number of Steps by 5 minutes time interval")
+Fig2
+```
+
+The maximum number of step (206) is achieved around the 14 pm 
+
+### Third project question: imputing missing values
+The following points are further requested by the project:
++ Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
++ Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
++ Create a new dataset that is equal to the original dataset but with the missing data filled in.
++ Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+Accordingly I 
++ calculate and report the total number of missing values (NAs)
++ identify a strategy for filling NAs 
++ plot the new histogram (Figure 4)
++ analyze the difference between the two dataframes, that is the data frame without NAs and that one with NAs filled, in terms of mean and median.
+
+```{r}
+apply(is.na(activity),2,sum)
+```
+As highlighted before there are 2304 NAs
+
+```{r}
+NoNADailyStepsDate <- NoNaActivity %>% group_by(date) %>%
+        summarise(NoNaMean = mean(steps), NoNaMed = median(steps), NoNaMax=max(steps), NoNaMin=min(steps), n = sum(steps)/mean(steps) )
+NoNADailyStepsDate
+NoNaActivityInt <- activity[!is.na(activity$interval), ]
+NoNADailyStepsDateInt <- NoNaActivity %>% group_by(interval) %>%
+        summarise(NoNaMean = mean(steps), NoNaMed = median(steps), NoNaMax=max(steps), NoNaMin=min(steps), n = sum(steps)/mean(steps) )
+NoNADailyStepsDateInt
+```
+
+Looking at the two groups of data I prefer to work with the interval since mean and median are closer. But, since the mean is less robust of the media I substitute the NA with the respective median. Before fill the NAs with the median I analyze the distribution of the median in the first data frame NoNaActivity (Figure 3)
+
+```{r Figure 3}
+MedInterval<- NoNaActivity %>% group_by(interval) %>%   
+         summarize(MedianSteps = median(steps, na.rm = T))
+         hist(MedInterval$MedianSteps, main ="Figure 3. Median number of steps distribution")
+         table(MedInterval$MedianSteps)
+```
+
+At this point I run the following for cicle to fill the NAs with the median. The new data frame is called MedActivity
+
+```{r}
+MedActivity<-activity
+for (i in 1:nrow(MedActivity)) {  
+        if (is.na(MedActivity$steps[i])) {  
+         index <- MedActivity$interval[i] 
+         value <- subset(MedInterval, interval==index)
+         MedActivity$steps[i] <- value$MedianSteps        
+     }
+}
+str(MedActivity)
+```
+
+Now the first analysis is repeated. That is the total number of step by day is computed 
+
+```{r}
+FillDailySteps <- MedActivity %>% group_by(date) %>%
+        summarise(TotNumSteps = sum(steps))
+```
+
+The new histogram (Figure 4)
+```{r Figure 4}
+Fig4<-ggplot(FillDailySteps, aes(TotNumSteps)) +
+        geom_histogram(breaks=seq(0, 25000, by = 2500),
+                       col="black",
+                       aes(fill=..count..)) +
+        scale_fill_gradient("Count", low = "green", high = "red")+
+        labs(title="Figure 4. Total Number of Steps per Day")
+Fig4
+
+```
+
+Now I compare the mean and the median of daily total number of steps for the two data frame named NoNaActivity (no NAs values) and MedActivity (NAs equal median of interval) respectively
+
+```{r}
+summary(NoNaActivity$steps)
+summary(MedActivity$steps)
+
+```
+
+Since the NAs have been substituted with the median that is, in most of caseses, equal to 0 (see Figure 3). The mean of the daily total number of stepsa in the "filled"" data frame (FillDailySteps) is lower than the corrisponding value achieved by the mean in the data frame without NAs (NoNaActivity) 
+To best appreciate the difference the two histogram are jointly plotted by employing the library gridExtra 
+
+```{r Figure 5}
+library(gridExtra)
+grid.arrange(Fig1, Fig4, ncol=2, nrow =1)
+```
+By the analysis of the figures clearly appears that the difference in two distribution relies in the daily total number of step equal to o
+
+### Fourth project question: Are there differences in activity patterns between weekdays and weekends?
+The following points are further requested by the project:
++ Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
++ Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+
+Accordingly I 
++ Create a new factor variable in the dataset with two levels - "weekday" and "weekend"
++ Split the data frame into two data frames containing respectively "weekend"" and "weekday" days 
++ Compute the mean by interval for each data frames
++ Bind the two data frame in order to make a panel plot (weekday vs weekend) using ggplot2 and the function facet.The new plot is named Figure 6
+
+Below I add an indicator variable which trasform date into two modalities: weekend and weekday the two factors
+```{r}
+MedActivity$day <- ifelse(weekdays(MedActivity$date) %in% c("Saturday", "Sunday"), "weekend", "weekday")
+```
+I split the MedActivity data frame
+```{r}
+weekend <- filter(MedActivity, day == "weekend")
+weekday <- filter(MedActivity, day == "weekday")
+```
+Then for each data frame I compute the mean of steps by interval
+```{r}
+weekend <- weekend %>%
+        group_by(interval) %>%
+        summarize(MeanSteps = mean(steps)) 
+weekend$day <- "weekend"
+weekday <- weekday %>%
+        group_by(interval) %>%
+        summarize(MeanSteps = mean(steps)) 
+weekday$day <- "weekday"
+newInterval <- rbind(weekend, weekday)
+newInterval$day <- as.factor(newInterval$day)
+newInterval$day <- relevel(newInterval$day, "weekend")
+
+```
+
+Finally I make the plot 
+```{r Figure 6}
+Fig6<-ggplot(newInterval,aes(interval,MeanSteps)) +
+        geom_line(color="blue") +
+        facet_grid(.~day) + 
+        labs(x="Intervals", y=expression("Number of Steps")) + 
+        labs(title=expression("Figure 6. Number of Steps in weekdays and weekend"))+
+        scale_fill_brewer(palette = "Set1")
+Fig6
+```
+
+It is intersting to observe that the peak is achieved in the same interval, around the 14 am. However during the weekend people appear more relaxed!
+
+
+
+
+
+
+
+
